@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/Emakefile" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/include/global.hrl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/dog.erl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/person.erl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/rabbit.erl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/world.erl" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
