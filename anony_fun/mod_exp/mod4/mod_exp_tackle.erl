@@ -11,10 +11,14 @@
 % 导出函数处理的接口
 exp_tackle(ExpFun)	->
 	{module,Mod} = erlang:fun_info(ExpFun,module),
+<<<<<<< HEAD
 	{name,Name} = erlang:fun_info(ExpFun,name),
 	{arity,Arity} = erlang:fun_info(ExpFun,arity),
 	ModList = exp_tackle(ExpFun,[{Mod,Name,Arity}]),
 	[Mod1 || {Mod1,_,_} <- ModList].
+=======
+	exp_tackle(ExpFun,[Mod]).
+>>>>>>> origin/master
 
 % ExpFun：导出函数
 % ModList:导出函数的依赖模块列表
@@ -57,7 +61,11 @@ call_tackle(Rep,ModList)	->
 			Mod = erlang:element(3,erlang:element(3,Tuple)),
 			Fun = erlang:element(3,erlang:element(4,Tuple)),
 			Arity = erlang:length(RepList),
+<<<<<<< HEAD
 			case code:is_sticky(Mod) orelse lists:member({Mod,Fun,Arity},ModList) of
+=======
+			case lists:member(Mod,ModList) orelse code:is_sticky(Mod) of
+>>>>>>> origin/master
 				true ->
 					ModList;
 				false ->
@@ -119,7 +127,11 @@ fun_tackle(Rep,ModList)	->
 					Mod = erlang:element(3,erlang:element(2,Tuple)),
 					Fun = erlang:element(3,erlang:element(3,Tuple)),
 					Arity = erlang:element(3,erlang:element(4,Tuple)),
+<<<<<<< HEAD
 					case code:is_sticky(Mod) orelse lists:member({Mod,Fun,Arity},ModList)  of
+=======
+					case lists:member(Mod,ModList) orelse code:is_sticky(Mod) of
+>>>>>>> origin/master
 						true ->
 							ModList;
 						false ->
@@ -155,8 +167,15 @@ exp_abstract_info(ExpFun)	->
 
 % 子模块的导出函数依赖
 sub_exp_tackle(Mod,Name,Arity,ModList)		->
+<<<<<<< HEAD
 	%% 检测Mod是否已经加载？没有加载的话使用新定义的c1()函数将其加载至VM中
 	NewModList = [{Mod,Name,Arity}|ModList], 
+=======
+	NewModList = [Mod|ModList], 
+
+	%% 检测Mod是否已经加载？没有加载的话使用新定义的c1()函数将其加载至VM中
+
+>>>>>>> origin/master
 	{FunForms,_,_} = meta:function(Name,Arity,Mod),
 	{_,_,_,_,[{_,_,_,_,RepList}]} = FunForms,
 	exp_tackle_recursive(RepList,NewModList).
