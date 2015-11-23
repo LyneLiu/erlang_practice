@@ -67,7 +67,7 @@ time_lookup_module_sets() ->
 lookup_all_set(Set, L) ->
     lists:foreach(fun(Key) -> sets:is_element(Key, Set) end, L).
 
-%% 整个单词集合中三个三字母的组合数目？？？
+%% 整个单词集合中三个三字母的组合数目！
 how_many_trigrams() ->
     F = fun(_, N) -> 1 + N  end,
     for_each_trigram_in_the_english_language(F, 0).
@@ -90,7 +90,7 @@ get_next_word([$\r,$\n|T],L)	->	{reverse([$\s|L]),T};
 get_next_word([H|T],L)	->	get_next_word(T,[H|L]);
 get_next_word([],L)	->	{reverse([$\s|L]),[]}.
 
-
+%% 获取三个字母的组合，并对其执行F函数操作
 scan_trigrams([X,Y,Z],F,A)	->
 	F([X,Y,Z],A);
 scan_trigrams([X,Y,Z|T],F,A)	->

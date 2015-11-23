@@ -1,0 +1,1 @@
+匿名函数v0.0.1：将匿名函数的Abstract Format提取出来，然后借助smerl、meta等模块的调用，生成临时temp_mod发送至远程节点。

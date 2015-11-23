@@ -10,7 +10,6 @@ test()	->
 	_Fun2 = fun() -> world end,
 	fun_clause(_Fun2).
 
-
 fun_clause(Fun)	->
 	{module,Mod} = erlang:fun_info(Fun,module),
 	{ExpName,Arity,FunCount} = anony_fun_info(Fun),
@@ -20,11 +19,17 @@ fun_clause(Fun)	->
 %% 获取匿名函数的Abstract Form
 parse_abs(FunInfo,FunCount)	->
 	{_,_,_,_,[{_,_,_,_,RepList}]} = FunInfo,
-	RepList,
 	Fun = fun(Element)	->
 				case erlang:element(1,Element) of
 					match ->
-						true;
+						SubElement = erlang:element(4,Element),
+						E =  atom_to_list(erlang:element(1,SubElement)) ,
+						if
+							E =:= "fun" ->
+								true;
+							true	->
+								false 
+						end;
 					_	->
 						false
 				end

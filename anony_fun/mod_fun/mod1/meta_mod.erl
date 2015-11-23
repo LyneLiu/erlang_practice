@@ -7,13 +7,16 @@ test1()	->
     meta_fun(Form).
 
 test2()	->
-	Fun1 = fun() -> hello end,
-	Fun2 = fun() -> hello end,
-	extract_fun(Fun2).
+	_Fun = test,
+	_Fun1 = fun() -> hello end,
+	_Fun2 = fun() -> world end,
+	_Fun3 = fun meta_mod:start/0,
+	extract_fun(_Fun2).
+
 
 extract_fun(Fun)	->
-	Form = anony_fun:fun_clause(Fun),
-	meta_fun(Form).
+	Form = anony_fun:fun_clause(Fun).
+	% meta_fun(Form).
 
 %% 生成temp_mod模块，并添加函数
 %% 返回temp_mod模块的匿名函数
