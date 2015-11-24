@@ -39,3 +39,10 @@ message is export function.
 
 3、添加一些测试用例进行实践检验
 test1实验已经能够正常运行，并且cplus函数已经添加至VM中，但是调用需要通过M:F的方式。
+
+
+错误：
+为什么code:get_object_code(Mod)得到结果为error？
+smerl模块添加的调试信息并没有输出，L：601、615
+解决办法：重新恢复Ubuntu系统环境，怀疑是系统出现问题！
+除了code_server模块，其他模块添加至source file中，
