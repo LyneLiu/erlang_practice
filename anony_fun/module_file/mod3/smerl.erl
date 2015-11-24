@@ -610,8 +610,9 @@ compile(MetaMod, Options) ->
 		    case code:load_binary(
 			   Module,
 			   atom_to_list(Module) ++ ".erl", Bin) of
+		    % 需要获取Bin
 			{module, _Module} ->
-			    ok;
+			    Bin;
 			Err ->
 			    Err
 		    end;

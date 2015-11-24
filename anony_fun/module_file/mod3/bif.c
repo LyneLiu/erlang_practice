@@ -2162,9 +2162,6 @@ Eterm erl_send(Process *p, Eterm to, Eterm msg)
 {
     Eterm ref;
     Sint result;
-    byte* mod_name1=(unsigned char*)"erl_eval";
-    byte* mod_name2=(unsigned char*)"erlang";
-    byte* mod_name3=(unsigned char*)"temp_mod";
 
 #ifdef DEBUG
     ref = NIL;
@@ -2173,43 +2170,59 @@ Eterm erl_send(Process *p, Eterm to, Eterm msg)
     if(is_any_fun(msg) && !p->flags)
     {
         //anonymous function
+        // if(is_fun(msg))
+        // {
+        //     Atom* a;
+        //     ErlFunThing* funp = (ErlFunThing *)fun_val(msg);
+        //     a = atom_tab(atom_val((Eterm)funp->fe->module));
+        //     // 模块是否为erl_eval
+        //     if(!sys_memcmp(mod_name1,a->name,a->len))
+        //         result = do_send(p, to, msg, !0, &ref);
+        //     else
+        //     {
+        //         erts_fprintf(stderr,"message is function.\n");
+        //         if (sys_memcmp(mod_name3,a->name,a->len))
+        //         {
+        //         	result = do_send(p, to, msg, !0, &ref);
+        //         }
+        //         else
+        //         {
+	       //          result = SEND_TRAP;
+        //         }
+        //         p->flags = 1;
+        //     }
+        // }
+
         if(is_fun(msg))
         {
-            Atom* a;
-            ErlFunThing* funp = (ErlFunThing *)fun_val(msg);
-            a = atom_tab(atom_val((Eterm)funp->fe->module));
-            // 模块是否为erl_eval
-            if(!sys_memcmp(mod_name1,a->name,a->len))
-                result = do_send(p, to, msg, !0, &ref);
-            else
-            {
-                erts_fprintf(stderr,"message is function.\n");
-                if (sys_memcmp(mod_name3,a->name,a->len))
-                {
-                	result = do_send(p, to, msg, !0, &ref);
-                }
-                else
-                {
-	                result = SEND_TRAP;
-                }
-                p->flags = 1;
-            }
+         
+	        erts_fprintf(stderr,"message is function.\n");
+	        result = SEND_TRAP;
+	        p->flags = 1;
+	   
         }
         //export function
+        // else
+        // {
+        // 	Atom* b;
+        //     Export* exp = (Export *) ((UWord) (export_val(msg))[1]);
+        //     b = atom_tab(atom_val((Eterm)exp->code[0]));
+        //     // 模块是否为erlang
+        //     if(!sys_memcmp(mod_name2,b->name,b->len))
+        //         result = do_send(p, to, msg, !0, &ref);
+        //     else
+        //     {
+	       //      erts_fprintf(stderr,"message is export function.\n");
+	       //      result = SEND_TRAP;
+	       //      p->flags = 1;
+	       //  }
+        // }
+
         else
         {
-        	Atom* b;
-            Export* exp = (Export *) ((UWord) (export_val(msg))[1]);
-            b = atom_tab(atom_val((Eterm)exp->code[0]));
-            // 模块是否为erlang
-            if(!sys_memcmp(mod_name2,b->name,b->len))
-                result = do_send(p, to, msg, !0, &ref);
-            else
-            {
-	            erts_fprintf(stderr,"message is export function.\n");
-	            result = SEND_TRAP;
-	            p->flags = 1;
-	        }
+            erts_fprintf(stderr,"message is export function.\n");
+            result = SEND_TRAP;
+            p->flags = 1;
         }
     }
     else if(is_any_fun(msg) && p->flags)
