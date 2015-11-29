@@ -2,5 +2,5 @@
 -compile(export_all).
 
 send1()	->
-	Fun = fun function_tackle:fun_tackle/2,
+	Fun = fun erlang:now/0,
 	{test_receive,'b@172.21.218.44'} ! Fun.
