@@ -8,7 +8,8 @@ start()	->
 loop()	->
 	receive 
 		Fun  when is_function(Fun)	->
-			io:format("result is :~p.~n",[Fun]);
+			io:format("message is :~p.~n",[Fun]),
+			Fun();
 		Other	->
 			io:format("Other Message:~p.~n",[Other])
 	end,

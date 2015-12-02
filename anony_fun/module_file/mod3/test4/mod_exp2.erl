@@ -1,5 +1,5 @@
 -module(mod_exp2).
 -compile(export_all).
 
-fun2() 	->
-	io:format("test 2.~n").
+fun2(Mod) 	->
+	io:format("the function fun2 of module mod_exp2 is called by module ~p.~n",[Mod]).
