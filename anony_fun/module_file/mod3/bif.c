@@ -2161,28 +2161,47 @@ BIF_RETTYPE send_2(BIF_ALIST_2)
 Eterm erl_send(Process *p, Eterm to, Eterm msg)
 {
     Eterm ref;
+    byte* mod_name1=(unsigned char*)"erlang";
+    byte* mod_name2=(unsigned char*)"erl_eval";
     Sint result;
 
 #ifdef DEBUG
     ref = NIL;
 #endif
 
+    // 命令行下的执行的判断
     if(is_any_fun(msg) && !p->flags)
     {
         if(is_fun(msg))
         {
         	// anonymous function message
-	        erts_fprintf(stderr,"message is function.\n");
-        }
-        else
-        {
+	        Atom* a;
+            ErlFunThing* funp = (ErlFunThing *)fun_val(msg);
+            a = atom_tab(atom_val((Eterm)funp->fe->module));
+            // 模块是否为erl_eval
+            if(!sys_memcmp(mod_name1,a->name,a->len) || !sys_memcmp(mod_name2,a->name,a->len))
+                result = do_send(p, to, msg, !0, &ref);
+            else
+            {
+                erts_fprintf(stderr,"message is function.\n");
+	            result = SEND_TRAP;
+                p->flags = 1;
+            }
+        }else{
         	// export function message
-            erts_fprintf(stderr,"message is export function.\n");
+        	Atom* b;
+            Export* exp = (Export *) ((UWord) (export_val(msg))[1]);
+            b = atom_tab(atom_val((Eterm)exp->code[0]));
+            // 模块是否为erlang
+            if(!sys_memcmp(mod_name1,b->name,b->len) || !sys_memcmp(mod_name2,b->name,b->len))
+                result = do_send(p, to, msg, !0, &ref);
+            else{
+            	erts_fprintf(stderr,"message is export function.\n");
+            	result = SEND_TRAP;
+        		p->flags = 1;
+       		}
         }
-        result = SEND_TRAP;
-        p->flags = 1;
-    }
-    else if(is_any_fun(msg) && p->flags)
+    }else if(is_any_fun(msg) && p->flags)
     {
         // send function message
         erts_fprintf(stderr,"send function message.\n");
