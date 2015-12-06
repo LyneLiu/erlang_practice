@@ -265,7 +265,8 @@ proxy_user_flush() ->
 
 %% 匿名函数的rpc处理
 fun_call(Node,ModList)  ->
-    ResultList = [fun_call_1(Node,Mod) || Mod <- ModList],
+    ResultList = fun_call_loop(Node,ModList),
+    % io:format("Syncronous tackle.Result:~p.~n",[ResultList]),
     Fun = fun(Elem,Acc) ->
               case Elem =:= ok of
                 true ->
@@ -275,7 +276,15 @@ fun_call(Node,ModList)  ->
               end
           end,
     lists:foldl(Fun,[ok],ResultList).
+%% 循环处理模块列表
+fun_call_loop(Node,ModList) ->
+    fun_call_loop(Node,ModList,[]).
 
+fun_call_loop(Node,[Head|Tail],Acc) ->
+    Result = fun_call_1(Node,Head),
+    fun_call_loop(Node,Tail,[Result|Acc]);
+fun_call_loop(_,[],Acc) ->
+    Acc.
 
 fun_call_1(Node,Mod)  ->
     case rpc:call(Node,erlang,module_loaded,[Mod]) of
@@ -294,6 +303,7 @@ fun_call_1(Node,Mod)  ->
         false ->
             fun_load(Node,Mod);
   _Other ->
+            io:format("Other status:~p.~n",[_Other]),
             ok
      end.
 

@@ -157,7 +157,7 @@ sub_exp_tackle(Mod,Name,Arity,ModList)		->
 	% 确保所有Mod编译加载至VM
 	case erlang:module_loaded(Mod) of
 		true ->
-			io:format("~p module have been loaded!~n",[Mod]),
+			% io:format("~p module had been loaded!~n",[Mod]),
 			ok;
 		false 	->
 			c:cplus(Mod)
@@ -174,8 +174,10 @@ fun_tackle(AnonyFun)	->
 	{ExpName,Arity,FunCount} = anony_fun_info(AnonyFun),
 	{FunInfo,_,_} = meta:function(ExpName,Arity,Mod),
 	AnonyFunAbs = fun_abs_tackle(FunInfo,FunCount),
-	ModList = exp_tackle_recursive([AnonyFunAbs],[Mod]),
-	{AnonyFunAbs,ModList}.
+	ModList = exp_tackle_recursive([AnonyFunAbs],[]),
+	% 得到的列表需要经过处理
+	NewModList = [Mod1 || {Mod1,_,_} <- ModList],
+	{AnonyFunAbs,NewModList}.
 
 %% 在定义匿名函数的导出函数的Abstract Format中获取匿名函数的Abstract Format
 fun_abs_tackle(FunInfo,FunCount)	->
