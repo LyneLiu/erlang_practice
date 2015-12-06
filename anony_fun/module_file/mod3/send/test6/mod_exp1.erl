@@ -4,7 +4,7 @@
 
 fun1() 	->
 	io:format("start a cross dependence test.~n"),
-	FunVal2 = fun mod_exp2:fun2/0,
-	FunVal5 = fun mod_exp5:fun5/0,
+	FunVal2 = fun mod_exp2:fun2/1,
+	FunVal5 = fun mod_exp5:fun5/1,
 	FunVal2(?MODULE),
 	FunVal5(?MODULE).
