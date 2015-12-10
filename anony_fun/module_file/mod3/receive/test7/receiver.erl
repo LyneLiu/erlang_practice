@@ -1,9 +1,8 @@
-% author:lyne
--module(test_receive).
+-module(receiver).
 -compile(export_all).
 
 start(Num)	->
-	register(test_receive,spawn(test_receive,loop,[Num])).
+	register(receiver,spawn(receiver,loop,[Num])).
 
 loop(Num)	->
 	receive 
