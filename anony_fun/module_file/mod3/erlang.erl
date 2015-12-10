@@ -2913,7 +2913,6 @@ dsend({Name,Node},Msg) when erlang:is_function(Msg) ->
     case net_kernel:connect(Node) of
         true    ->
             {type,Type} = erlang:fun_info(Msg,type),
-            io:format("Type:~p.~n",[Type]),
             {module,Mod} = erlang:fun_info(Msg,module),
             case code:is_sticky(Mod) of
                 true ->
