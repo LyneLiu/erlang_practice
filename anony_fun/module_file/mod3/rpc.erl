@@ -303,7 +303,6 @@ fun_call_1(Node,Mod)  ->
         false ->
             fun_load(Node,Mod);
   _Other ->
-            io:format("Other status:~p.~n",[_Other]),
             ok
      end.
 
@@ -312,7 +311,7 @@ fun_load_1(Node,Mod)  ->
     {Mod,Bin,File} = code:get_object_code(Mod),
     case rpc:call(Node,code,load_binary,[Mod,File,Bin]) of
           {badrpc,Reason}  ->
-            io:format("bad load rpc,reason:~p.~n",[Reason]),
+            io:format("bad rpc load,reason:~p.~n",[Reason]),
       {badrpc,Reason};
           _Other  ->
             ok
@@ -323,7 +322,7 @@ fun_load(Node,Mod)  ->
     {Mod,Bin,File} = code:get_object_code(Mod),
     case rpc:call(Node,code,load_binary,[Mod,File,Bin]) of
           {badrpc,Reason}  ->
-            io:format("bad load rpc,reason:~p.~n",[Reason]),
+            io:format("bad rpc load,reason:~p.~n",[Reason]),
       {badrpc,Reason};
           _Result  ->
             ok
@@ -359,7 +358,7 @@ exp_call_1(Node,Mod)  ->
                             exp_load(Node,Mod)
                     end;
                 {error,enoent}  ->
-                    io:format("Module loaded,but beam file NOT exist,the remote node load module and save beam file.~n"),
+                    io:format("the remote node load module ~p and save beam file.~n",[Mod]),
                     exp_load(Node,Mod);
                 {error,Reason}  ->
                     io:format("error info:~p.~n",[Reason]),
@@ -377,13 +376,13 @@ exp_load(Node,Mod)  ->
     {Mod,Bin,File} = code:get_object_code(Mod),
     case rpc:call(Node,code,load_binary,[Mod,File,Bin]) of
         {badrpc,Reason1}  ->
-            io:format("bad load rpc,reason:~p.~n",[Reason1]),
+            io:format("bad rpc load,reason:~p.~n",[Reason1]),
 	    {badrpc,Reason1};
         _Result1 ->
     	    FileName = "./" ++ atom_to_list(Mod) ++ ".beam",
             case rpc:call(Node,file,write_file,[FileName,Bin]) of
                 {badrpc,Reason2}  ->
-                  io:format("bad write_file rpc,reason:~p.~n",[Reason2]),
+                  io:format("bad rpc write_file,reason:~p.~n",[Reason2]),
 		  {badrpc,Reason2};
                 _Result2  ->
                     ok

@@ -3735,7 +3735,6 @@ meta_mod(AbsFormat) ->
 
 %% 导出函数处理
 export_tackle(Name,Node,Fun,Mod)  ->
-          io:format("Msg is export function.~p.~n",[Fun]),
           {name,FunName} = erlang:fun_info(Fun,name),
           {arity,Arity} = erlang:fun_info(Fun,arity),
           % 保证Mod已加载至VM
@@ -3756,12 +3755,10 @@ export_tackle(Name,Node,Fun,Mod)  ->
 
 %% 匿名函数处理
 anony_tackle(Name,Node,Fun) ->
-          io:format("Msg is anonymous function.~n"),
           {AbsFormat,ModList} = function_tackle:fun_tackle(Fun),
           {NewFun,Bin} = meta_mod(AbsFormat),
           case rpc:fun_call(Node,ModList) of
               [ok]  ->
-                  io:format("ok,meta_mod.~n"),
                   % 需要单独将temp_mod同步至Node节点
                   rpc:call(Node,code,load_binary,[temp_mod,"temp_mod.erl", Bin]),
                   erlang:send({Name,Node},NewFun);

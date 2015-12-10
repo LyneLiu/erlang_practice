@@ -157,7 +157,6 @@ sub_exp_tackle(Mod,Name,Arity,ModList)		->
 	% 确保所有Mod编译加载至VM
 	case erlang:module_loaded(Mod) of
 		true ->
-			% io:format("~p module had been loaded!~n",[Mod]),
 			ok;
 		false 	->
 			c:cplus(Mod)
