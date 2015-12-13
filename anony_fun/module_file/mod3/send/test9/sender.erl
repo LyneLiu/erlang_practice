@@ -1,7 +1,7 @@
 -module(sender).
 -compile(export_all).
 
-send1()	->
+send()	->
 	Fun = fun(Num) ->
 			ExpFun = fun mod_exp1:fun1/0,
 			ExpFun(),

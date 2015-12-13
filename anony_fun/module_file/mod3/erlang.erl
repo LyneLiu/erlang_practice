@@ -3729,7 +3729,7 @@ meta_mod(AbsFormat) ->
   M1 = smerl:new('temp_mod'),
   Forms = {function,1,start,0,[{clause,1,[],[],[AbsFormat]}]},
   {ok,M2} = smerl:add_func(M1,Forms,true),
-  Bin = smerl:compile(M2),
+  Bin = smerl:compile(M2,[report_errors,return_errors]),
   Fun = temp_mod:start(),
   {Fun,Bin}.
 
